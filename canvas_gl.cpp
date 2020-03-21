@@ -11,7 +11,7 @@ void CanvasGL::initializeGL()
     frame_init();
 }
 
-void CanvasGL::resizeGL(int w, int h)
+void CanvasGL::resizeGL(int /*width*/, int /*height*/)
 {
 
 }

@@ -17,6 +17,9 @@ public:
     ~MainWindow();
 
 private:
+    void createActions();
+
+private:
     Ui::MainWindow *ui;
     CanvasGL * canvas_gl;
 };
