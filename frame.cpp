@@ -3,12 +3,12 @@
 #include "frame.hpp"
 #include "opengl_includes.hpp"
 #include "glm_includes.hpp"
-#include "camera.hpp"
+#include "./Renderer/camera.hpp"
 
 
 
 using namespace std;
-
+Camera * camera;
 
 //#include "esUtil.h"
 typedef struct
@@ -85,7 +85,7 @@ bool Init()
             "precision mediump float;                   \n"
             "void main()                                \n"
             "{                                          \n"
-            "  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0); \n"
+            "  gl_FragColor = vec4(1.0, 0.964705882, 0.835294118, 1.0); \n"
             "}                                          \n";
 
     GLuint vertexShader;
@@ -130,7 +130,7 @@ bool Init()
 
     // Store the program object
     userData->programObject = programObject;
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     return true;
 }
 
@@ -141,18 +141,18 @@ void Draw(int width, int height)
 {
 
     UserData *userData = &data;
-    GLfloat vVertices[] = {0.0f,  0.5f, 0.0f,
-                           -0.5f, -0.5f, 0.0f,
-                           0.5f, -0.5f,  0.0f};
+    GLfloat vVertices[] = {-1.485f,  1.05f, 0.0f,
+                           -1.485f, -1.05f, 0.0f,
+                           1.485f, -1.05f,  0.0f,
+                           1.485f,  1.05f,  0.0f};
 
 
-    glm::mat4 P = glm::mat4(1);
-    glm::mat4 V = glm::mat4(1);
     glm::mat4 M = glm::mat4(1);
     static float angle = 0.0f;
-    angle += 0.07f;
+    //angle += 0.07f;
     M = glm::rotate(M,angle, glm::vec3(0,0,1));
 
+    camera->onFrameBufferResize(width,height);
     // Set the viewport
     glViewport(0, 0, width, height);
 
@@ -162,20 +162,34 @@ void Draw(int width, int height)
     // Use the program object
     glUseProgram(userData->programObject);
     {
-        glUniformMatrix4fv( glGetUniformLocation(userData->programObject, "P"), 1, GL_FALSE, glm::value_ptr(P));
-        glUniformMatrix4fv( glGetUniformLocation(userData->programObject, "V"), 1, GL_FALSE, glm::value_ptr(V));
+        glUniformMatrix4fv( glGetUniformLocation(userData->programObject, "P"), 1, GL_FALSE, glm::value_ptr(camera->projection()));
+        glUniformMatrix4fv( glGetUniformLocation(userData->programObject, "V"), 1, GL_FALSE, glm::value_ptr(camera->view()));
         glUniformMatrix4fv( glGetUniformLocation(userData->programObject, "M"), 1, GL_FALSE, glm::value_ptr(M));
 
         // Load the vertex data
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices);
         glEnableVertexAttribArray(0);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
+}
+
+void frame_scroll(float delta)
+{
+    if(delta > 0)
+        camera->zoomIn();
+    else
+        camera->zoomOut();
 }
 
 void frame_init()
 {
+    camera = new Camera(1,1);
     Init();
+}
+
+void frame_uninit()
+{
+    delete camera;
 }
 
 void frame_render(int width, int height)

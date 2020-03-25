@@ -5,7 +5,7 @@
 
 class Camera{
 public:
-    Camera(int width, int height);
+    Camera(int viewport_width, int viewport_height);
 
     void zoomOut();
     void zoomIn();

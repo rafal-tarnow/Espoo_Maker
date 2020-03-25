@@ -31,15 +31,22 @@ SOURCES += \
         mainwindow.cpp \
     canvas_gl.cpp \
     frame.cpp \
-    camera.cpp
+    mesh.cpp \
+    Renderer/camera.cpp
 
 HEADERS += \
         mainwindow.h \
     canvas_gl.h \
     glm_includes.hpp \
     frame.hpp \
-    camera.hpp \
-    opengl_includes.hpp
+    opengl_includes.hpp \
+    mesh.hpp \
+    Renderer/material.hpp \
+    Renderer/scene.hpp \
+    Renderer/Renderer_API/OpenGl_ES_2_0/texture.hpp \
+    Renderer/Renderer_API/OpenGl_ES_2_0/framebuffer.hpp \
+    Renderer/Renderer_API/OpenGl_ES_2_0/shader.hpp \
+    Renderer/camera.hpp
 
 FORMS += \
         mainwindow.ui

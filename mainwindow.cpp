@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setWindowTitle("Espoo Maker");
+
     canvas_gl = new CanvasGL(this);
     this->setCentralWidget(canvas_gl);
 
